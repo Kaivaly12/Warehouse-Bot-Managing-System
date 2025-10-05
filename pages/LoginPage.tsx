@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Card from '../components/ui/Card';
 import { RobotIcon } from '../components/icons/Icons';
@@ -18,7 +17,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                     <div className="inline-block p-4 bg-neon-blue/10 rounded-full mb-4 border border-neon-blue/30">
                          <RobotIcon className="w-12 h-12 text-neon-blue drop-shadow-[0_0_5px_#00f6ff]" />
                     </div>
-                    <h1 className="text-3xl font-bold text-white">AI Warehouse Bot Manager</h1>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-white">AI Warehouse Bot Manager</h1>
                     <p className="text-gray-400 mt-2">Sign in to access your dashboard</p>
                 </div>
 

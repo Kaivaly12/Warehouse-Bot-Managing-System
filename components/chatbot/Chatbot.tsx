@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { RobotIcon } from '../icons/Icons';
 import Card from '../ui/Card';
@@ -26,7 +25,7 @@ const Chatbot: React.FC = () => {
         if(isOpen && messages.length === 0) {
             setIsLoading(true);
             getChatbotResponse("Hello").then(response => {
-                setMessages([{ text: response, sender: 'ai' }]);
+                setMessages([{ text: "Hello! I'm the AI Warehouse Assistant. How can I help you today?", sender: 'ai' }]);
                 setIsLoading(false);
             });
         }
@@ -34,7 +33,7 @@ const Chatbot: React.FC = () => {
 
 
     const handleSend = async () => {
-        if (input.trim() === '') return;
+        if (input.trim() === '' || isLoading) return;
 
         const userMessage: Message = { text: input, sender: 'user' };
         setMessages(prev => [...prev, userMessage]);
@@ -52,17 +51,18 @@ const Chatbot: React.FC = () => {
         <>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="fixed bottom-8 right-8 w-16 h-16 bg-neon-blue rounded-full text-white flex items-center justify-center shadow-lg shadow-neon-blue/50 hover:scale-110 transition-transform"
+                className="fixed bottom-8 right-8 w-16 h-16 bg-neon-blue rounded-full text-white flex items-center justify-center shadow-lg shadow-neon-blue/50 hover:scale-110 transition-transform z-50"
                 aria-label="Toggle Chatbot"
             >
                 <RobotIcon className="w-8 h-8" />
             </button>
 
             {isOpen && (
-                <div className="fixed bottom-28 right-8 w-96 h-[32rem] z-50">
-                    <Card className="flex flex-col h-full !p-0">
-                        <header className="p-4 border-b border-white/20">
+                <div className="fixed inset-0 sm:inset-auto sm:bottom-28 sm:right-8 w-full sm:w-96 h-full sm:h-[32rem] z-50">
+                    <Card className="flex flex-col h-full !p-0 rounded-none sm:rounded-2xl">
+                        <header className="p-4 border-b border-white/20 flex justify-between items-center">
                             <h3 className="font-bold text-lg">AI Warehouse Assistant</h3>
+                            <button onClick={() => setIsOpen(false)} className="sm:hidden text-2xl">&times;</button>
                         </header>
                         <div className="flex-1 p-4 overflow-y-auto">
                             <div className="flex flex-col gap-4">
@@ -96,8 +96,9 @@ const Chatbot: React.FC = () => {
                                     onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                                     placeholder="Ask something..."
                                     className="flex-1 px-4 py-2 rounded-lg bg-black/5 dark:bg-white/5 border-transparent focus:border-neon-blue focus:ring-0"
+                                    disabled={isLoading}
                                 />
-                                <button onClick={handleSend} className="px-4 py-2 bg-neon-blue text-dark-bg font-semibold rounded-lg">Send</button>
+                                <button onClick={handleSend} className="px-4 py-2 bg-neon-blue text-dark-bg font-semibold rounded-lg disabled:opacity-50" disabled={isLoading}>Send</button>
                             </div>
                         </footer>
                     </Card>

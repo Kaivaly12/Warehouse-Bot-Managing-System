@@ -1,7 +1,11 @@
-
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { RobotIcon, DashboardIcon, InventoryIcon, ForecastIcon, ReportsIcon, SettingsIcon } from '../icons/Icons';
+
+interface SidebarProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
 
 const navigationItems = [
     { to: '/', icon: DashboardIcon, label: 'Dashboard' },
@@ -12,9 +16,14 @@ const navigationItems = [
     { to: '/settings', icon: SettingsIcon, label: 'Settings' },
 ];
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     return (
-        <aside className="w-64 bg-light-card dark:bg-dark-card backdrop-blur-xl border-r border-white/10 dark:border-white/10 flex-shrink-0 p-4 flex flex-col">
+        <aside className={`
+            fixed inset-y-0 left-0 z-40 w-64 bg-light-card dark:bg-dark-card backdrop-blur-xl border-r border-white/10 
+            flex-shrink-0 p-4 flex flex-col
+            transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0
+            ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}>
             <div className="flex items-center gap-2 px-4 py-2 mb-8">
                 <RobotIcon className="w-8 h-8 text-neon-blue" />
                 <h1 className="text-xl font-bold text-gray-800 dark:text-white">AI Warehouse</h1>
@@ -25,6 +34,7 @@ const Sidebar: React.FC = () => {
                         key={item.to}
                         to={item.to}
                         end
+                        onClick={onClose}
                         className={({ isActive }) => `
                             flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 dark:text-gray-300
                             transition-all duration-200 hover:bg-black/5 dark:hover:bg-white/5

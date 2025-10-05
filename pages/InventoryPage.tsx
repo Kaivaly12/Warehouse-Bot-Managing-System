@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Card from '../components/ui/Card';
 import { MOCK_PRODUCTS } from '../constants';
@@ -31,21 +30,21 @@ const InventoryPage: React.FC = () => {
     };
 
     return (
-        <Card className="h-full">
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">Inventory Management</h2>
-                <div className="flex gap-2">
-                    <button onClick={handleReorderSuggestion} className="px-4 py-2 rounded-lg bg-neon-green/20 text-neon-green font-semibold border border-neon-green/30 hover:bg-neon-green/30 transition-colors disabled:opacity-50">
+        <Card className="h-full flex flex-col">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                <h2 className="text-2xl font-bold w-full sm:w-auto">Inventory Management</h2>
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <button onClick={handleReorderSuggestion} className="w-full sm:w-auto px-4 py-2 rounded-lg bg-neon-green/20 text-neon-green font-semibold border border-neon-green/30 hover:bg-neon-green/30 transition-colors disabled:opacity-50">
                         {isLoadingSuggestion ? 'Analyzing...' : 'AI Reorder Suggestion'}
                     </button>
-                    <button className="px-4 py-2 rounded-lg bg-neon-blue text-dark-bg font-semibold hover:shadow-neon-blue transition-shadow">
+                    <button className="w-full sm:w-auto px-4 py-2 rounded-lg bg-neon-blue text-dark-bg font-semibold hover:shadow-neon-blue transition-shadow">
                         Add New Item
                     </button>
                 </div>
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="w-full text-left">
+            <div className="overflow-x-auto flex-1">
+                <table className="w-full text-left min-w-[640px]">
                     <thead>
                         <tr className="border-b border-white/10">
                             <th className="p-4">Product ID</th>
