@@ -1,5 +1,8 @@
-import React from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
+import { useUser } from '../../hooks/useUser';
 import { SunIcon, MoonIcon, MenuIcon } from '../icons/Icons';
 
 interface HeaderProps {
@@ -8,7 +11,27 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onLogout, onToggleSidebar }) => {
-    const { theme, toggleTheme } = useTheme();
+    const { effectiveTheme, setTheme } = useTheme();
+    const { user } = useUser();
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const handleToggle = () => {
+        setTheme(effectiveTheme === 'dark' ? 'light' : 'dark');
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <header className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-xl sticky top-0 md:top-4 md:mx-4 z-20 md:rounded-2xl border-b md:border border-white/20 dark:border-white/10">
@@ -30,8 +53,8 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onToggleSidebar }) => {
 
                 <div className="flex items-center gap-4">
                     {/* Theme Toggle */}
-                    <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                        {theme === 'dark' ? <SunIcon className="w-6 h-6 text-yellow-400" /> : <MoonIcon className="w-6 h-6 text-gray-700" />}
+                    <button onClick={handleToggle} className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                        {effectiveTheme === 'dark' ? <SunIcon className="w-6 h-6 text-yellow-400" /> : <MoonIcon className="w-6 h-6 text-gray-700" />}
                     </button>
                     
                     {/* Notifications */}
@@ -41,19 +64,21 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onToggleSidebar }) => {
                     </div>
 
                     {/* Profile Dropdown */}
-                    <div className="relative group">
-                        <button className="flex items-center gap-2">
-                           <img src="https://picsum.photos/100/100" alt="User" className="w-9 h-9 rounded-full object-cover" />
+                    <div className="relative" ref={dropdownRef}>
+                        <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex items-center gap-2">
+                           <img src={user.profilePicture} alt="User" className="w-9 h-9 rounded-full object-cover" />
                             <div className="text-left hidden md:block">
-                                <p className="font-semibold text-sm text-gray-800 dark:text-white">Admin User</p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">Warehouse Manager</p>
+                                <p className="font-semibold text-sm text-gray-800 dark:text-white">{user.name}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">{user.role}</p>
                             </div>
                         </button>
-                         <div className="absolute right-0 mt-2 w-48 bg-light-card dark:bg-dark-card rounded-lg shadow-lg py-1 border border-white/20 dark:border-white/10 hidden group-hover:block">
-                            <a href="#profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/5">Profile</a>
-                            <a href="#settings" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/5">Settings</a>
-                            <button onClick={onLogout} className="w-full text-left block px-4 py-2 text-sm text-red-500 hover:bg-black/5 dark:hover:bg-white/5">Logout</button>
-                        </div>
+                         {isDropdownOpen && (
+                            <div className="absolute right-0 mt-2 w-48 bg-light-card dark:bg-dark-card rounded-lg shadow-lg py-1 border border-white/20 dark:border-white/10">
+                                <Link to="/settings" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/5">Profile</Link>
+                                <Link to="/settings" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/5">Settings</Link>
+                                <button onClick={onLogout} className="w-full text-left block px-4 py-2 text-sm text-red-500 hover:bg-black/5 dark:hover:bg-white/5">Logout</button>
+                            </div>
+                         )}
                     </div>
                 </div>
             </div>
