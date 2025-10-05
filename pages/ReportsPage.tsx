@@ -28,6 +28,21 @@ const ReportsPage: React.FC = () => {
         { name: 'Quarterly Financials', format: 'PDF' },
     ];
 
+    const currencyTickFormatter = (tick: any) => {
+        if (typeof tick !== 'number') return tick;
+        if (tick >= 1000) return `₹${tick / 1000}K`;
+        return `₹${tick}`;
+    };
+
+    const currencyTooltipFormatter = (value: any) => {
+        if (typeof value !== 'number') return value;
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 0,
+        }).format(value);
+    };
+
     return (
         <div className="space-y-6">
             <h2 className="text-2xl font-bold">Reports & Analytics</h2>
@@ -63,8 +78,11 @@ const ReportsPage: React.FC = () => {
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
                             <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: 'none', borderRadius: '0.5rem' }} />
+                            <YAxis tickFormatter={currencyTickFormatter} />
+                            <Tooltip 
+                                contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: 'none', borderRadius: '0.5rem' }} 
+                                formatter={currencyTooltipFormatter}
+                            />
                             <Area type="monotone" dataKey="profit" stroke="#00f6ff" fillOpacity={1} fill="url(#colorProfit)" />
                             <Area type="monotone" dataKey="cost" stroke="#ff4d4d" fillOpacity={1} fill="url(#colorCost)" />
                         </AreaChart>

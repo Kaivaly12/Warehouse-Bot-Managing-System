@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Card from '../components/ui/Card';
 import { MOCK_PRODUCTS } from '../constants';
@@ -63,7 +64,12 @@ const InventoryPage: React.FC = () => {
                                 <td className="p-4 font-semibold">{product.name}</td>
                                 <td className="p-4">{product.category}</td>
                                 <td className="p-4">{product.quantity}</td>
-                                <td className="p-4">${product.price.toFixed(2)}</td>
+                                <td className="p-4">
+                                    {new Intl.NumberFormat('en-IN', {
+                                        style: 'currency',
+                                        currency: 'INR',
+                                    }).format(product.price)}
+                                </td>
                                 <td className="p-4">{product.supplier}</td>
                                 <td className="p-4">
                                     <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(product.status)}`}>

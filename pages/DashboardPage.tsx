@@ -38,7 +38,7 @@ const DashboardPage: React.FC = () => {
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <KpiCard title="Total Stock Value" value="$1.2M" icon="🏷️" change="+5.2%" changeType="increase" />
+                <KpiCard title="Total Stock Value" value="₹10 Cr" icon="🏷️" change="+5.2%" changeType="increase" />
                 <KpiCard title="Active Warehouse Bots" value="6 / 8" icon="⚙️" />
                 <KpiCard title="Predicted Demand" value="+12%" icon="📊" change="+2.1%" changeType="increase" />
                 <KpiCard title="Out-of-Stock Alerts" value="1" icon="🚨" />
